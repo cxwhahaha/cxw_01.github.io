@@ -24,14 +24,13 @@
 
     <script type="text/javascript" src="../js/ch02/gasket-triangles3"></script>
 </head>
-<body onload="initTriangles()">
-    <div align="center" style="margin-top: 120px">
-        <canvas id="gl-canvas" width="512" height="512">你的浏览器不支持HTML5 canvas元素</canvas><br><br>
-        请输入0~7的数字   <input type="text" id="weihe" value="2"/>
-        <input type="button" onclick="draw()" value="绘制"/>
-        
-    </div>
-</body>
 
+<body>
+	请输入剖分的层次(0-4)：<input type="text" id="count" />
+	请输入旋转度数：<input type="text" id="xCount" />
+	<input type="submit" onclick="submit()" />
+    <h2>Triangle Tessellation</h2>
+    <canvas id="gl-canvas" width="600" height="600">你的浏览器不支持HTML5 canvas元素</canvas>
+</body>
 
 </html>
