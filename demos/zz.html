@@ -1,0 +1,104 @@
+14:57<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Canvas Clock</title>
+    <style>
+        body {
+            background-color: #F5F5F5;
+        }
+        canvas {
+            border: 1px solid #444;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="clock" width="300" height="300"></canvas>
+    <script>
+        const canvas = document.getElementById("clock");
+        const ctx = canvas.getContext("2d");
+
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+
+        // 将坐标系移动到中心点
+        ctx.translate(centerX, centerY);
+
+        function drawClock() {
+            const now = new Date();
+            const radius = canvas.width / 2 - 5;
+            ctx.clearRect(-centerX, -centerY, canvas.width, canvas.height); // 每次绘制前清空整个画布
+            ctx.beginPath();
+            ctx.arc(0, 0, radius, 0, 2 * Math.PI);
+            ctx.stroke();
+
+            // 绘制钟表数字
+            ctx.font = "bold 14px Arial";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            for (let i = 1; i <= 12; i++) {
+                const angle = i * Math.PI / 6;
+                ctx.rotate(angle);
+                ctx.translate(0, -radius + 15);
+                ctx.rotate(-angle);
+                ctx.fillText(i.toString(), 0, 0);
+                ctx.rotate(angle);
+                ctx.translate(0, radius - 15);
+                ctx.rotate(-angle)
+            }
+
+            // 绘制时针
+            const hour = now.getHours();
+            const minute = now.getMinutes();
+            const second = now.getSeconds();
+            const hourAngle = (hour % 12 + minute / 60 + second / 3600) * Math.PI / 6;
+            const hourLength = 0.6 * radius;
+            const hourX = Math.sin(hourAngle) * hourLength;
+            const hourY = -Math.cos(hourAngle) * hourLength;
+
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.lineTo(hourX, hourY);
+            ctx.lineWidth = 4;
+            ctx.lineCap = "round";
+            ctx.stroke();
+
+            // 绘制分针
+            const minuteAngle = (minute + second / 60) * Math.PI / 30;
+            const minuteLength = 0.8 * radius;
+            const minuteX = Math.sin(minuteAngle) * minuteLength;
+            const minuteY = -Math.cos(minuteAngle) * minuteLength;
+
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.lineTo(minuteX, minuteY);
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // 绘制秒针
+            const secondAngle = second * Math.PI / 30;
+            const secondLength = 0.9 * radius;
+            const secondX = Math.sin(secondAngle) * secondLength;
+            const secondY = -Math.cos(secondAngle) * secondLength;
+
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.lineTo(secondX, secondY);
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = "#7ea5ff"; // 设置颜色
+            ctx.stroke();
+
+            // 绘制中央圆点
+            ctx.beginPath();
+            ctx.arc(0, 0, 5, 0, 2 * Math.PI);
+            ctx.fillStyle = "#aa5500"; // 设置颜色
+            ctx.fill();
+
+            // 循环绘制
+            setTimeout(drawClock, 1000);
+        }
+
+        drawClock();
+    </script>
+</body>
+</html>
